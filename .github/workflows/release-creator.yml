@@ -22,9 +22,9 @@ jobs:
           VERSION=$(jq -r '.version' package.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # Create GitHub Release using softprops/action-gh-release
+      # Create GitHub Release using softprops/action-gh-release (also creates the tag)
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.VERSION }}
           name: Release v${{ env.VERSION }}
@@ -34,14 +34,4 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Use PAT for creating the release
-
-      # Configure Git to use the PAT and Push the version tag
-      - name: Push version tag to repository
-        run: |
-          git config --global user.email "raphaelaboohi@gmail.com"
-          git config --global user.name "Raphael Aboohi"
-          git tag v${{ env.VERSION }}
-          git push origin v${{ env.VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Use PAT for pushing the tag
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
