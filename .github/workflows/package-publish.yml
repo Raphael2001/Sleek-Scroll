@@ -8,9 +8,11 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: NPM_TOKEN
     permissions:
       contents: read
       packages: write
+      id-token: write
 
     steps:
       - uses: actions/checkout@v6
@@ -42,10 +44,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Publish to npm (npmjs.org)
+      # Publish to npm (npmjs.org) via OIDC Trusted Publisher
       - name: Publish to npm
         run: |
-          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > .npmrc
-          npm publish --access public --registry https://registry.npmjs.org
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public --registry https://registry.npmjs.org
