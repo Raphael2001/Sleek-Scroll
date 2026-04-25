@@ -12,6 +12,8 @@ jobs:
       # Checkout the repository
       - name: Checkout the repository
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
 
       # Read the version from package.json
       - name: Read version from package.json
@@ -40,7 +42,6 @@ jobs:
           git config --global user.email "raphaelaboohi@gmail.com"
           git config --global user.name "Raphael Aboohi"
           git tag v${{ env.VERSION }}
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/Raphael2001/Sleek-Scroll.git
           git push origin v${{ env.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Use PAT for pushing the tag
