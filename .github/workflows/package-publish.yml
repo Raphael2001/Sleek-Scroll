@@ -8,18 +8,17 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Setup Node.js
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20.x"
+          node-version: "24.x"
 
       # Remove any pre-existing .npmrc before running yarn to prevent Yarn from reading it
       - name: Remove .npmrc
