@@ -1,11 +1,11 @@
-![npm downloads](https://badgen.net/npm/dt/sleek-scroll?icon=npm&color=blue&labelColor=black&label=Downloads&cache=300)
-![npm version](https://badgen.net/npm/v/sleek-scroll?icon=npm&color=green&labelColor=black&label=Version&cache=300)
-![npm license](https://badgen.net/npm/license/sleek-scroll?icon=github&color=purple&labelColor=black&label=License)
-![bundle size](https://badgen.net/bundlephobia/min/sleek-scroll?icon=package&color=orange&labelColor=black&label=Minified%20Size)
-![last commit](https://badgen.net/github/last-commit/Raphael2001/Sleek-Scroll?icon=github&color=yellow&labelColor=black&label=Last%20Commit)
-![open issues](https://badgen.net/github/issues/Raphael2001/Sleek-Scroll?icon=github&color=red&labelColor=black&label=Open%20Issues)
-
 # Sleek-Scroll
+
+[![npm downloads](https://img.shields.io/npm/dt/sleek-scroll?style=flat&logo=npm&color=blue&labelColor=black&label=Downloads)](https://www.npmjs.com/package/sleek-scroll)
+[![npm version](https://img.shields.io/npm/v/sleek-scroll?style=flat&logo=npm&color=green&labelColor=black&label=Version)](https://www.npmjs.com/package/sleek-scroll)
+[![npm license](https://img.shields.io/npm/l/sleek-scroll?style=flat&color=purple&labelColor=black&label=License)](https://www.npmjs.com/package/sleek-scroll)
+[![bundle size](https://img.shields.io/bundlephobia/min/sleek-scroll?style=flat&color=orange&labelColor=black&label=Minified%20Size)](https://bundlephobia.com/package/sleek-scroll)
+[![last commit](https://img.shields.io/github/last-commit/Raphael2001/Sleek-Scroll?style=flat&logo=github&color=yellow&labelColor=black&label=Last%20Commit)](https://github.com/Raphael2001/Sleek-Scroll)
+[![open issues](https://img.shields.io/github/issues/Raphael2001/Sleek-Scroll?style=flat&logo=github&color=red&labelColor=black&label=Open%20Issues)](https://github.com/Raphael2001/Sleek-Scroll/issues)
 
 Sleek-Scroll is a lightweight, easy-to-style scrollbar component for React applications. It supports RTL (right-to-left) languages and is compatible with all major browsers.
 
@@ -56,11 +56,11 @@ Sleek-Scroll allows you to style the scrollbar easily using standard CSS. For ex
 
 ```css
 :root {
-  --sleek-scroll-thumb: blue;
-  --sleek-scroll-thumb-hover: lightblue;
-  --sleek-scroll-track: rgba(0, 0, 0, 0.1);
-  --sleek-scroll-width: 7px;
-  --sleek-scroll-side: 4px;
+  --react-scrollify-thumb: blue;
+  --react-scrollify-thumb-hover: lightblue;
+  --react-scrollify-track: rgba(0, 0, 0, 0.1);
+  --react-scrollify-width: 7px;
+  --react-scrollify-side: 4px;
 }
 ```
 
