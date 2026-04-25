@@ -1,7 +1,7 @@
 {
   "name": "sleek-scroll",
   "version": "1.0.31",
-  "description": "",
+  "description": "Lightweight, customizable React scrollbar with RTL support, zero dependencies, and automatic content size tracking.",
   "main": "dist/index.js",
   "files": [
     "dist"
