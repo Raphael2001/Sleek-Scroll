@@ -1,6 +1,11 @@
 ## Commands
 
+Prefer `yarn` over `npm` for all commands.
+
 ```bash
+# Dev server (demo app at localhost:5173)
+yarn dev
+
 # Build (compiles SCSS then TypeScript)
 yarn build
 
@@ -27,7 +32,7 @@ Single-component library. Exports one default: `SleekScrollbar` (`src/index.tsx`
 
 - `__wrapper` — `overflow: hidden`, full height container
 - `__content` — scrollable div with native scrollbar hidden (`scrollbar-width: none`)
-- `__bar` — absolutely positioned custom scrollbar (left or right via `isRTL`)
+- `__bar` — absolutely positioned custom scrollbar (left or right via `side` prop)
   - `__track` — full-height click target
   - `__thumb` — sized/positioned proportionally to scroll ratio
 

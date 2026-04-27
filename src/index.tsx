@@ -3,15 +3,23 @@ import useResizeObserver from "./hooks/useResizeObserver";
 
 import "./styles/scrollbar.css";
 
+export const ScrollbarSide = {
+  left: "left",
+  right: "right",
+} as const;
+
+type Side = (typeof ScrollbarSide)[keyof typeof ScrollbarSide];
+
 // Define the props for the Scrollbar component
 type Props = {
   children: React.ReactElement;
-  isRTL?: Boolean;
+  side?: Side;
+  thumbMinHeight?: number;
 };
 
 const prefix = "sleek-scroll";
 
-function SleekScrollbar({ children, isRTL = false }: Props) {
+function SleekScrollbar({ children, side = ScrollbarSide.right, thumbMinHeight = 20 }: Props) {
   // Refs for DOM elements
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -65,7 +73,8 @@ function SleekScrollbar({ children, isRTL = false }: Props) {
     const scrollRatio = contentEle.clientHeight / contentEle.scrollHeight;
     if (scrollRatio < 1) {
       setShouldHideScrollbar(false);
-      thumbEle.style.height = `${scrollRatio * 100}%`;
+      const thumbHeight = Math.max(scrollRatio * 100, thumbMinHeight);
+      thumbEle.style.height = `${thumbHeight}%`;
     } else {
       setShouldHideScrollbar(true);
     }
@@ -160,7 +169,7 @@ function SleekScrollbar({ children, isRTL = false }: Props) {
       <div
         className={`${prefix}__bar ${
           shouldHideScrollbar ? `${prefix}__bar--hidden` : ""
-        } ${isRTL ? `${prefix}__bar--rtl` : `${prefix}__bar--ltr`}`}
+        } ${prefix}__bar--${side}`}
       >
         <div
           className={`${prefix}__track`}
