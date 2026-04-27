@@ -69,12 +69,15 @@ Sleek-Scroll allows you to style the scrollbar easily using standard CSS. For ex
 You can pass configuration options as props to the Sleek-Scroll component to customize its behavior.
 
 ```javascript
-<SleekScrollbar isRTL={true}>
+import SleekScrollbar, { ScrollbarSide } from "sleek-scroll";
+
+<SleekScrollbar side={ScrollbarSide.left} thumbMinHeight={15}>
   <div>Your content here</div>
 </SleekScrollbar>
 ```
 
-- `rtl`: Set to `true` for right-to-left language support.
+- `side`: Which side to render the scrollbar. Use the exported `ScrollbarSide` const: `ScrollbarSide.left` or `ScrollbarSide.right`. Default: `ScrollbarSide.right`.
+- `thumbMinHeight`: Minimum thumb height as a percentage of the track. Prevents the thumb from shrinking too small on very long content. Default: `20`.
 
 ## Browser Support
 

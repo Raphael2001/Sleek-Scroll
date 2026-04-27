@@ -1,12 +1,13 @@
 {
   "name": "sleek-scroll",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Lightweight, customizable React scrollbar with RTL support, zero dependencies, and automatic content size tracking.",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
+    "dev": "vite",
     "clean": "rimraf dist",
     "prebuild": "npm run clean && npm run compile:scss",
     "build": "tsc",
@@ -29,9 +30,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^18.3.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "rimraf": "^6.0.1",
     "sass": "^1.62.1",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vite": "^8.0.10"
   },
   "peerDependencies": {
     "react": "18.3.0"
