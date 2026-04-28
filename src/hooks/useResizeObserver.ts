@@ -1,19 +1,25 @@
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
 function useResizeObserver(
   ref: RefObject<HTMLElement>,
   onSizeChange: () => void
 ) {
+  const onSizeChangeRef = useRef(onSizeChange);
+
+  useEffect(() => {
+    onSizeChangeRef.current = onSizeChange;
+  });
+
   useEffect(() => {
     const ro = new ResizeObserver(() => {
-      onSizeChange();
+      onSizeChangeRef.current();
     });
 
     if (ref.current) {
       ro.observe(ref.current);
       return () => ro.disconnect();
     }
-  }, [ref.current]);
+  }, [ref]);
 }
 
 export default useResizeObserver;
