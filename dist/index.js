@@ -26,11 +26,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ScrollbarSide = void 0;
 const react_1 = __importStar(require("react"));
 const useResizeObserver_1 = __importDefault(require("./hooks/useResizeObserver"));
 require("./styles/scrollbar.css");
+exports.ScrollbarSide = {
+    left: "left",
+    right: "right",
+};
 const prefix = "sleek-scroll";
-function SleekScrollbar({ children, isRTL = false }) {
+function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMinHeight = 20 }) {
     // Refs for DOM elements
     const trackRef = (0, react_1.useRef)(null);
     const thumbRef = (0, react_1.useRef)(null);
@@ -75,7 +80,8 @@ function SleekScrollbar({ children, isRTL = false }) {
         const scrollRatio = contentEle.clientHeight / contentEle.scrollHeight;
         if (scrollRatio < 1) {
             setShouldHideScrollbar(false);
-            thumbEle.style.height = `${scrollRatio * 100}%`;
+            const thumbHeight = Math.max(scrollRatio * 100, thumbMinHeight);
+            thumbEle.style.height = `${thumbHeight}%`;
         }
         else {
             setShouldHideScrollbar(true);
@@ -150,7 +156,7 @@ function SleekScrollbar({ children, isRTL = false }) {
     return (react_1.default.createElement("div", { className: `${prefix}__wrapper` },
         react_1.default.createElement("div", { className: `${prefix}__content`, ref: contentContainerRef, onScroll: handleScrollContent },
             react_1.default.createElement("div", { ref: contentRef }, children)),
-        react_1.default.createElement("div", { className: `${prefix}__bar ${shouldHideScrollbar ? `${prefix}__bar--hidden` : ""} ${isRTL ? `${prefix}__bar--rtl` : `${prefix}__bar--ltr`}` },
+        react_1.default.createElement("div", { className: `${prefix}__bar ${shouldHideScrollbar ? `${prefix}__bar--hidden` : ""} ${prefix}__bar--${side}` },
             react_1.default.createElement("div", { className: `${prefix}__track`, ref: trackRef, onClick: (e) => handleClickTrack(e.nativeEvent) }),
             react_1.default.createElement("div", { className: `${prefix}__thumb`, ref: thumbRef, onMouseDown: (e) => handleMouseDown(e.nativeEvent), onTouchStart: (e) => handleTouchStart(e.nativeEvent) }))));
 }
