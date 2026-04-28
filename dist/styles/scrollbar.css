@@ -32,10 +32,10 @@
   opacity: 0;
   pointer-events: none;
 }
-.sleek-scroll__bar--rtl {
+.sleek-scroll__bar--right {
   right: var(--react-scrollify-side);
 }
-.sleek-scroll__bar--ltr {
+.sleek-scroll__bar--left {
   left: var(--react-scrollify-side);
 }
 .sleek-scroll__thumb {
