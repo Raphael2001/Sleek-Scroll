@@ -41,24 +41,30 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
     const thumbRef = (0, react_1.useRef)(null);
     const contentContainerRef = (0, react_1.useRef)(null);
     const contentRef = (0, react_1.useRef)(null);
-    // Custom hook to observe size changes in content and container
-    (0, useResizeObserver_1.default)(contentRef, measureContent);
-    (0, useResizeObserver_1.default)(contentContainerRef, measureContent);
-    // State to manage the visibility of the scrollbar
+    // State to manage scrollbar properties
     const [shouldHideScrollbar, setShouldHideScrollbar] = (0, react_1.useState)(false);
+    const [thumbHeight, setThumbHeight] = (0, react_1.useState)(thumbMinHeight);
+    // Custom hook to observe size changes in content and container
+    (0, useResizeObserver_1.default)(contentRef, () => measureContent());
+    (0, useResizeObserver_1.default)(contentContainerRef, () => measureContent());
     // Measure content size on initial render
     (0, react_1.useEffect)(() => {
         measureContent();
     }, []);
     // Handle content scroll to update thumb position
-    const handleScrollContent = () => {
+    const handleScrollContent = (0, react_1.useCallback)(() => {
         const thumbEle = thumbRef.current;
         const contentEle = contentContainerRef.current;
         if (!thumbEle || !contentEle)
             return;
-        // Calculate thumb position based on content scroll
-        thumbEle.style.top = `${(contentEle.scrollTop * 100) / contentEle.scrollHeight}%`;
-    };
+        const scrollableHeight = contentEle.scrollHeight - contentEle.clientHeight;
+        if (scrollableHeight <= 0)
+            return;
+        const scrollRatio = contentEle.scrollTop / scrollableHeight;
+        // Map the 0-1 scroll ratio to the available travel distance of the thumb
+        const top = scrollRatio * (100 - thumbHeight);
+        thumbEle.style.top = `${top}%`;
+    }, [thumbHeight]);
     // Handle click on the scrollbar track to jump to the clicked position
     const handleClickTrack = (e) => {
         const trackEle = trackRef.current;
@@ -66,10 +72,12 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
         if (!trackEle || !contentEle)
             return;
         const bound = trackEle.getBoundingClientRect();
-        const percentage = (e.clientY - bound.top) / bound.height;
-        // Scroll the content container based on the click position
-        contentEle.scrollTop =
-            percentage * (contentEle.scrollHeight - contentEle.clientHeight);
+        const clickPosRatio = (e.clientY - bound.top) / bound.height;
+        // We want to center the thumb on the click position
+        const thumbHeightRatio = thumbHeight / 100;
+        const scrollRatio = (clickPosRatio - thumbHeightRatio / 2) / (1 - thumbHeightRatio);
+        const clampedRatio = Math.max(0, Math.min(1, scrollRatio));
+        contentEle.scrollTop = clampedRatio * (contentEle.scrollHeight - contentEle.clientHeight);
     };
     // Measure the content size and adjust scrollbar visibility and thumb size
     function measureContent() {
@@ -80,8 +88,15 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
         const scrollRatio = contentEle.clientHeight / contentEle.scrollHeight;
         if (scrollRatio < 1) {
             setShouldHideScrollbar(false);
-            const thumbHeight = Math.max(scrollRatio * 100, thumbMinHeight);
-            thumbEle.style.height = `${thumbHeight}%`;
+            const newThumbHeight = Math.max(scrollRatio * 100, thumbMinHeight);
+            setThumbHeight(newThumbHeight);
+            thumbEle.style.height = `${newThumbHeight}%`;
+            // Update position immediately to reflect new height
+            const scrollableHeight = contentEle.scrollHeight - contentEle.clientHeight;
+            if (scrollableHeight > 0) {
+                const currentScrollRatio = contentEle.scrollTop / scrollableHeight;
+                thumbEle.style.top = `${currentScrollRatio * (100 - newThumbHeight)}%`;
+            }
         }
         else {
             setShouldHideScrollbar(true);
@@ -90,19 +105,24 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
     // Handle mouse drag on the scrollbar thumb
     const handleMouseDown = (0, react_1.useCallback)((e) => {
         const ele = thumbRef.current;
+        const trackEle = trackRef.current;
         const contentEle = contentContainerRef.current;
-        if (!ele || !contentEle)
+        if (!ele || !contentEle || !trackEle)
             return;
         const startPos = {
             top: contentEle.scrollTop,
-            x: e.clientX,
             y: e.clientY,
         };
         // Move the thumb and scroll content as the mouse moves
         const handleMouseMove = (e) => {
             const dy = e.clientY - startPos.y;
-            const scrollRatio = contentEle.clientHeight / contentEle.scrollHeight;
-            contentEle.scrollTop = startPos.top + dy / scrollRatio;
+            const trackHeight = trackEle.clientHeight;
+            const scrollableHeight = contentEle.scrollHeight - contentEle.clientHeight;
+            // The distance the thumb can actually move in pixels
+            const thumbTravel = trackHeight * (1 - thumbHeight / 100);
+            if (thumbTravel <= 0)
+                return;
+            contentEle.scrollTop = startPos.top + (dy / thumbTravel) * scrollableHeight;
             updateCursor(ele);
         };
         // Clean up event listeners on mouse up
@@ -113,25 +133,29 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
         };
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
-    }, []);
+    }, [thumbHeight]);
     // Handle touch drag on the scrollbar thumb
     const handleTouchStart = (0, react_1.useCallback)((e) => {
         const ele = thumbRef.current;
+        const trackEle = trackRef.current;
         const contentEle = contentContainerRef.current;
-        if (!ele || !contentEle)
+        if (!ele || !contentEle || !trackEle)
             return;
         const touch = e.touches[0];
         const startPos = {
             top: contentEle.scrollTop,
-            x: touch.clientX,
             y: touch.clientY,
         };
         // Move the thumb and scroll content as the touch moves
         const handleTouchMove = (e) => {
             const touch = e.touches[0];
             const dy = touch.clientY - startPos.y;
-            const scrollRatio = contentEle.clientHeight / contentEle.scrollHeight;
-            contentEle.scrollTop = startPos.top + dy / scrollRatio;
+            const trackHeight = trackEle.clientHeight;
+            const scrollableHeight = contentEle.scrollHeight - contentEle.clientHeight;
+            const thumbTravel = trackHeight * (1 - thumbHeight / 100);
+            if (thumbTravel <= 0)
+                return;
+            contentEle.scrollTop = startPos.top + (dy / thumbTravel) * scrollableHeight;
             updateCursor(ele);
         };
         // Clean up event listeners on touch end
@@ -142,7 +166,7 @@ function SleekScrollbar({ children, side = exports.ScrollbarSide.right, thumbMin
         };
         document.addEventListener("touchmove", handleTouchMove);
         document.addEventListener("touchend", handleTouchEnd);
-    }, []);
+    }, [thumbHeight]);
     // Update the cursor style to prevent text selection during drag
     const updateCursor = (ele) => {
         ele.style.userSelect = "none";
