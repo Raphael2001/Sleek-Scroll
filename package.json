@@ -1,24 +1,26 @@
 {
   "name": "sleek-scroll",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "Lightweight, customizable React scrollbar with RTL support, zero dependencies, and automatic content size tracking.",
   "main": "dist/index.js",
+  "module": "dist/esm/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "vite",
     "clean": "rimraf dist",
-    "prebuild": "npm run clean && npm run compile:scss",
-    "build": "tsc",
+    "prebuild": "yarn clean && yarn compile:scss",
+    "build": "tsc && tsc -p tsconfig.esm.json",
     "compile:scss": "sass src/styles:dist/styles --no-source-map",
     "publish:npm": "npm publish --registry https://registry.npmjs.org/",
     "publish:github": "npm publish --registry https://npm.pkg.github.com"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "keywords": [
@@ -40,7 +42,7 @@
     "vite": "^8.0.10"
   },
   "peerDependencies": {
-    "react": "18.3.0"
+    "react": ">=17"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
