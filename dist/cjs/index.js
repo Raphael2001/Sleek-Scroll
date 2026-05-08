@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScrollbarSide = void 0;
 const react_1 = __importStar(require("react"));
 const useResizeObserver_1 = __importDefault(require("./hooks/useResizeObserver"));
-require("./styles/scrollbar.css");
+require("../styles/scrollbar.css");
 exports.ScrollbarSide = {
     left: "left",
     right: "right",

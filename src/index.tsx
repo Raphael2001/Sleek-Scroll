@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import useResizeObserver from "./hooks/useResizeObserver";
 
-import "./styles/scrollbar.css";
+import "../styles/scrollbar.css";
 
 export const ScrollbarSide = {
   left: "left",
