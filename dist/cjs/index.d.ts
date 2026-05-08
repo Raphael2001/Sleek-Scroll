@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/scrollbar.css";
+import "../styles/scrollbar.css";
 export declare const ScrollbarSide: {
     readonly left: "left";
     readonly right: "right";
